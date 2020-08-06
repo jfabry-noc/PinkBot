@@ -5,16 +5,25 @@ import sys
 from pathlib import Path
 from twython import Twython
 
-# Check for the color file first.
-color_file_path = "./pinks.json"
-color_file = Path(color_file_path)
-if not color_file.is_file():
-    # Later gracefully handle this, maybe run the other script.
-    print("Color file is missing! Quitting...")
-    sys.exit()
+# Function to verify a file exists.
+def check_file(file_path):
+    file_object = Path(file_path)
+    if not file_object.is_file():
+        # Later log this and maybe recover by running the other script.
+        print("File at " + file_path + " is missing! Quitting...")
+        sys.exit()
 
-# Create a seed and the map.
+# Instantiate some variables.
+color_file_path = "./pinks.json"
+config_file_path = "./configuration.json"
+
+# Verify the files.
+check_file(color_file_path)
+check_file(config_file_path)
+
+# Create a seed and the map for the colors and config.
 result = {}
+config = {}
 random.seed()
 
 # Read the file.
@@ -26,5 +35,8 @@ with open(color_file_path) as json_file:
 if not len(result) > 0:
     print("We didn't get a color! Quitting...")
     sys.exit()
-else:
-    print(result)
+
+# Import the config file.
+with open(config_file_path) as config_file:
+    config = json.load(config_file)
+
