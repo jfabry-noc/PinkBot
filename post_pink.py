@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import json
 import random
+import requests
 import sys
+from bs4 import BeautifulSoup
 from pathlib import Path
 from twython import Twython
 
@@ -9,9 +11,11 @@ from twython import Twython
 def check_file(file_path):
     file_object = Path(file_path)
     if not file_object.is_file():
-        # Later log this and maybe recover by running the other script.
-        print("File at " + file_path + " is missing! Quitting...")
-        sys.exit()
+        # Check if it's the color file.
+        if file_path == "./pinks.json":
+            exec(open("get_pinks.py").read())
+        else:
+            sys.exit()
 
 # Instantiate some variables.
 color_file_path = "./pinks.json"
@@ -32,6 +36,7 @@ with open(color_file_path) as json_file:
     index = random.randint(0, len(color_data) - 1)
     result = color_data[index]
 
+# Make sure we got something.
 if not len(result) > 0:
     print("We didn't get a color! Quitting...")
     sys.exit()
