@@ -40,3 +40,11 @@ if not len(result) > 0:
 with open(config_file_path) as config_file:
     config = json.load(config_file)
 
+# Create the Twython instance.
+twitter_client = Twython(config["app_key"], config["app_secret"], config["oauth_key"], config["oauth_secret"])
+
+# Post the status.
+website = "https://www.computerhope.com/cgi-bin/htmlcolor.pl?c=" + result["hex"][1:]
+rgb_nice = result["rgb"][4:len(result["rgb"])-1]
+status_message = "Today's Color: " + result["name"] + "\n\nHex: " + result["hex"] + "\nRGB: " + rgb_nice + "\n\n" + website
+twitter_client.update_status(status=status_message)
