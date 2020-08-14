@@ -103,7 +103,11 @@ logging.info("Making the Twitter post.")
 website = "https://www.computerhope.com/cgi-bin/htmlcolor.pl?c=" + result["hex"][1:]
 rgb_nice = result["rgb"][4:len(result["rgb"])-1]
 status_message = "Today's Color: " + result["name"] + "\n\nHex: " + result["hex"] + "\nRGB: " + rgb_nice + "\n\n" + website
-twitter_client.update_status(status=status_message)
+try:
+    twitter_client.update_status(status=status_message)
+except:
+    error = sys.exc_info()[0]
+    logging.error("Error posting: " + str(error))
 
 # Log the end.
 logging.info("Gracefully completed the script.")
